@@ -2,6 +2,7 @@ package gb.ru.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
 import gb.ru.StarGame;
 
 public class DesktopLauncher {
