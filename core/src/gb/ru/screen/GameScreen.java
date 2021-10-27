@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import gb.ru.base.BaseScreen;
 import gb.ru.math.Rect;
+import gb.ru.pool.BulletPool;
 import gb.ru.sprite.Background;
 import gb.ru.sprite.MainShip;
 import gb.ru.sprite.Star;
@@ -17,9 +18,11 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas;
     private Texture bg;
     private Background background;
-    private MainShip mainShip;
 
     private Star[] stars;
+    private BulletPool bulletPool;
+
+    private MainShip mainShip;
 
     @Override
     public void show() {
@@ -31,13 +34,16 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
-        mainShip = new MainShip(atlas);
+        bulletPool = new BulletPool();
+
+        mainShip = new MainShip(atlas, bulletPool);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 
@@ -56,7 +62,7 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
-
+        bulletPool.dispose();
     }
 
     @Override
@@ -79,14 +85,20 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        mainShip.touchUp(touch, pointer, button);
+        return false;
     }
 
     private void update(float delta) {
         for (Star star : stars) {
             star.update(delta);
         }
+        bulletPool.updateActiveObjects(delta);
         mainShip.update(delta);
+    }
+
+    private void freeAllDestroyed() {
+        bulletPool.freeAllDestroyed();
     }
 
     private void draw() {
@@ -95,6 +107,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        bulletPool.drawActiveObjects(batch);
         mainShip.draw(batch);
         batch.end();
     }
