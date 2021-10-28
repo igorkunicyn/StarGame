@@ -1,5 +1,8 @@
 package gb.ru.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -23,20 +26,26 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
 
     private MainShip mainShip;
+    private Sound soundBulletForMainShip;
+
+    private Music musicFon;
 
     @Override
     public void show() {
         super.show();
-        atlas = new TextureAtlas("textures/mainAtlas.tpack");
-        bg = new Texture("textures/bg.png");
-        background = new Background(bg);
-        stars = new Star[STAR_COUNT];
+        this.atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        this.bg = new Texture("textures/bg.png");
+        this.background = new Background(bg);
+        this.stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
-        bulletPool = new BulletPool();
-
-        mainShip = new MainShip(atlas, bulletPool);
+        this.bulletPool = new BulletPool();
+        this.soundBulletForMainShip = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+        this.mainShip = new MainShip(atlas, bulletPool, soundBulletForMainShip);
+        this.musicFon = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        musicFon.setVolume(0.5f);
+        musicFon.play();
     }
 
     @Override
@@ -63,6 +72,8 @@ public class GameScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        soundBulletForMainShip.dispose();
+        musicFon.dispose();
     }
 
     @Override
