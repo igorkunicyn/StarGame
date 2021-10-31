@@ -41,10 +41,10 @@ public class Ship extends Sprite {
             reloadTimer = 0f;
             shoot();
         }
-
+        bulletPos.set(pos);
     }
 
-    protected void shoot() {
+    private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, bulletHeight, damage);
         bulletSound.play();

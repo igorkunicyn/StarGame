@@ -15,14 +15,6 @@ public class Sprite extends Rect {
     protected int frame;
     private boolean destroyed;
 
-    public int getFrame() {
-        return frame;
-    }
-
-    public void setFrame(int frame) {
-        this.frame = frame;
-    }
-
     public Sprite() {
 
     }
