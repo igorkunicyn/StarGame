@@ -1,6 +1,8 @@
 package gb.ru.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +26,8 @@ public class MainShip extends Sprite {
     private final Vector2 v;
     private final Vector2 v0;
 
+    private final Sound soundBullet;
+
     private Rect worldBounds;
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -31,7 +35,11 @@ public class MainShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    private float time = 0.3f;
+    private float counter = 1f;
+
+
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound sound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
@@ -40,6 +48,7 @@ public class MainShip extends Sprite {
         this.damage = 1;
         this.v = new Vector2();
         this.v0 = new Vector2(0.5f, 0);
+        this.soundBullet = sound;
     }
 
     @Override
@@ -61,7 +70,12 @@ public class MainShip extends Sprite {
 //            setLeft(worldBounds.getLeft());
 //            stop();
 //        }
-
+        counter -= delta;
+        if (counter <= 0.01f){
+            shoot();
+            soundBullet.play(0.1f);
+        }
+        if (counter <= 0) counter = time;
         if (getLeft() > worldBounds.getRight()) {
             setRight(worldBounds.getLeft());
         }
@@ -122,6 +136,7 @@ public class MainShip extends Sprite {
                 break;
             case Input.Keys.UP:
                 shoot();
+//                soundBullet.play(0.1f);
                 break;
         }
         return false;
