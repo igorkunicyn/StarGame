@@ -39,8 +39,9 @@ public class EnemyEmitter {
     private final TextureRegion[] enemyMediumRegions;
     private final TextureRegion[] enemyBigRegions;
 
-    private final Vector2 enemyStartV = new Vector2(0f, -0.3f);
-
+    private final Vector2 enemySmallV = new Vector2(0f, -0.2f);
+    private final Vector2 enemyMediumV = new Vector2(0f, -0.03f);
+    private final Vector2 enemyBigV = new Vector2(0f, -0.005f);
     private final Vector2 enemySmallBulletV = new Vector2(0f, -0.3f);
     private final Vector2 enemyMediumBulletV = new Vector2(0f, -0.25f);
     private final Vector2 enemyBigBulletV = new Vector2(0f, -0.3f);
@@ -65,41 +66,38 @@ public class EnemyEmitter {
             if (type < 0.5f) {
                 enemy.set(
                         enemySmallRegions,
-                        enemyStartV,
+                        enemySmallV,
                         bulletRegion,
                         ENEMY_SMALL_BULLET_HEIGHT,
                         enemySmallBulletV,
                         ENEMY_SMALL_BULLET_DAMAGE,
                         ENEMY_SMALL_HP,
                         ENEMY_SMALL_RELOAD_INTERVAL,
-                        ENEMY_SMALL_HEIGHT,
-                        type
+                        ENEMY_SMALL_HEIGHT
                 );
             } else if (type < 0.8f) {
                 enemy.set(
                         enemyMediumRegions,
-                        enemyStartV,
+                        enemyMediumV,
                         bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT,
                         enemyMediumBulletV,
                         ENEMY_MEDIUM_BULLET_DAMAGE,
                         ENEMY_MEDIUM_HP,
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
-                        ENEMY_MEDIUM_HEIGHT,
-                        type
+                        ENEMY_MEDIUM_HEIGHT
                 );
             } else {
                 enemy.set(
                         enemyBigRegions,
-                        enemyStartV,
+                        enemyBigV,
                         bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT,
                         enemyBigBulletV,
                         ENEMY_BIG_BULLET_DAMAGE,
                         ENEMY_BIG_HP,
                         ENEMY_BIG_RELOAD_INTERVAL,
-                        ENEMY_BIG_HEIGHT,
-                        type
+                        ENEMY_BIG_HEIGHT
                 );
             }
             enemy.pos.x = Rnd.nextFloat(

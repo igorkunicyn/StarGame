@@ -7,21 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import gb.ru.base.Ship;
 import gb.ru.math.Rect;
 import gb.ru.pool.BulletPool;
+import gb.ru.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
-    private static final float RELOAD_INTERVAL_SMALL_SHIP = 0.4f;
-    private static final float RELOAD_INTERVAL_MEDIUM_SHIP = 0.5f;
-    private static final float RELOAD_INTERVAL_BIG_SHIP = 0.6f;
-
-    private final Vector2 enemySmallV = new Vector2(0f, -0.2f);
-    private final Vector2 enemyMediumV = new Vector2(0f, -0.03f);
-    private final Vector2 enemyBigV = new Vector2(0f, -0.005f);
-
-    private float type;
-
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds, Sound bulletSound) {
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound bulletSound) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.bulletSound = bulletSound;
         this.bulletV = new Vector2();
@@ -34,20 +26,10 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         super.update(delta);
         if (getTop() < worldBounds.getTop()) {
-            if (type < 0.5f && type >= 0f) {
-                v.set(enemySmallV);
-                reloadInterval = RELOAD_INTERVAL_SMALL_SHIP;
-            }
-            if (type < 0.8f && type >= 0.5f) {
-                v.set(enemyMediumV);
-                reloadInterval = RELOAD_INTERVAL_MEDIUM_SHIP;
-            }
-            if (type < 1f && type >= 0.8f) {
-                v.set(enemyBigV);
-                reloadInterval = RELOAD_INTERVAL_BIG_SHIP;
-            }
+            v.set(v0);
+        } else {
+            reloadTimer = reloadInterval * 0.8f;
         }
-
         if (getBottom() < worldBounds.getBottom()) {
             destroy();
         }
@@ -62,11 +44,10 @@ public class EnemyShip extends Ship {
             int damage,
             int hp,
             float reloadInterval,
-            float height,
-            float type
+            float height
     ) {
         this.regions = regions;
-        this.v.set(v);
+        this.v0.set(v);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
         this.bulletV.set(bulletV);
@@ -74,6 +55,13 @@ public class EnemyShip extends Ship {
         this.hp = hp;
         this.reloadInterval = reloadInterval;
         setHeightProportion(height);
-        this.type = type;
+        this.v.set(0, -0.5f);
+    }
+
+    public boolean isBulletCollision(Bullet bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y);
     }
 }
