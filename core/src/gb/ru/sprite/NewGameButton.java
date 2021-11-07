@@ -2,27 +2,30 @@ package gb.ru.sprite;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import gb.ru.base.BaseButton;
+import gb.ru.base.Sprite;
 import gb.ru.math.Rect;
+import gb.ru.pool.BulletPool;
+import gb.ru.pool.EnemyPool;
 import gb.ru.screen.GameScreen;
 
-public class PlayButton extends BaseButton {
+public class NewGameButton extends BaseButton {
 
-    private static final float HEIGHT = 0.25f;
-    private static final float PADDING = 0.03f;
+    private final static float HEIGHT = 0.07f;
+    private final static float WIGHT = 0.3f;
+    private final static float PADDING = 0.02f;
 
     private final Game game;
 
-    public PlayButton(TextureAtlas atlas, Game game) {
-        super(atlas.findRegion("btPlay"));
+    public NewGameButton(TextureAtlas atlas, Game game) {
+        super(atlas.findRegion("button_new_game"));
         this.game = game;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(HEIGHT);
-        setLeft(worldBounds.getLeft() + PADDING);
+        setWidth(WIGHT);
         setBottom(worldBounds.getBottom() + PADDING);
     }
 
@@ -30,4 +33,5 @@ public class PlayButton extends BaseButton {
     public void action() {
         game.setScreen(new GameScreen(game));
     }
+
 }
