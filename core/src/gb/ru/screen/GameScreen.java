@@ -12,6 +12,7 @@ import gb.ru.math.Rect;
 import gb.ru.pool.BulletPool;
 import gb.ru.pool.EnemyPool;
 import gb.ru.sprite.Background;
+import gb.ru.sprite.EnemyShip;
 import gb.ru.sprite.MainShip;
 import gb.ru.sprite.Star;
 import gb.ru.util.EnemyEmitter;
@@ -121,6 +122,14 @@ public class GameScreen extends BaseScreen {
         enemyPool.updateActiveObjects(delta);
         mainShip.update(delta);
         enemyEmitter.generate(delta);
+        for (EnemyShip enemyShip: enemyPool.getActiveObjects()){
+            if (enemyShip.getBottom()<mainShip.getTop()){
+                if (enemyShip.getLeft()< mainShip.getRight()&&enemyShip.getRight()>mainShip.getLeft()){
+                    enemyShip.setFrame(1);
+                }
+            }
+        }
+
     }
 
     private void freeAllDestroyed() {

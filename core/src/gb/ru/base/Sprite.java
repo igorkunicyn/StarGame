@@ -68,6 +68,13 @@ public class Sprite extends Rect {
         return false;
     }
 
+    public int getFrame() {
+        return frame;
+    }
+
+    public void setFrame(int frame) {
+        this.frame = frame;
+    }
 
     public float getAngle() {
         return angle;
