@@ -11,27 +11,25 @@ import gb.ru.screen.GameScreen;
 
 public class NewGameButton extends BaseButton {
 
-    private final static float HEIGHT = 0.07f;
-    private final static float WIGHT = 0.3f;
-    private final static float PADDING = 0.02f;
+    private final static float HEIGHT = 0.05f;
+    private final static float TOP_MARGIN = 0.015f;
 
-    private final Game game;
+    private final GameScreen gameScreen;
 
-    public NewGameButton(TextureAtlas atlas, Game game) {
+    public NewGameButton(TextureAtlas atlas, GameScreen gameScreen) {
         super(atlas.findRegion("button_new_game"));
-        this.game = game;
+        this.gameScreen = gameScreen;
     }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(HEIGHT);
-        setWidth(WIGHT);
-        setBottom(worldBounds.getBottom() + PADDING);
+        setTop(TOP_MARGIN);
     }
 
     @Override
     public void action() {
-        game.setScreen(new GameScreen(game));
+        gameScreen.startNewGame();
     }
 
 }

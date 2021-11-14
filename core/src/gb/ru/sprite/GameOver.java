@@ -8,6 +8,7 @@ import gb.ru.math.Rect;
 public class GameOver extends Sprite {
 
     private final static float HEIGHT = 0.08f;
+    private final static float BOTTOM_MARGIN = 0.009f;
 
     public GameOver(TextureAtlas atlas) {
         super(atlas.findRegion("message_game_over"));
@@ -16,6 +17,6 @@ public class GameOver extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(HEIGHT);
-        pos.set(worldBounds.pos);
+        setBottom(BOTTOM_MARGIN);
     }
 }
