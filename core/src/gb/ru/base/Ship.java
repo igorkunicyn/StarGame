@@ -55,6 +55,10 @@ public class Ship extends Sprite {
         }
     }
 
+    public int getHp() {
+        return hp;
+    }
+
     public void damage(int hp) {
         this.hp -= hp;
         if (this.hp <= 0) {
