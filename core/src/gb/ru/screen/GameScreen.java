@@ -1,5 +1,6 @@
 package gb.ru.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -17,7 +18,9 @@ import gb.ru.pool.ExplosionPool;
 import gb.ru.sprite.Background;
 import gb.ru.sprite.Bullet;
 import gb.ru.sprite.EnemyShip;
+import gb.ru.sprite.GameOver;
 import gb.ru.sprite.MainShip;
+import gb.ru.sprite.NewGameButton;
 import gb.ru.sprite.Star;
 import gb.ru.util.EnemyEmitter;
 
@@ -28,6 +31,9 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas;
     private Texture bg;
     private Background background;
+    private GameOver gameOver;
+    private NewGameButton newGameButton;
+    private final Game game;
 
     private Star[] stars;
     private BulletPool bulletPool;
@@ -43,6 +49,10 @@ public class GameScreen extends BaseScreen {
 
     private EnemyEmitter enemyEmitter;
 
+    public GameScreen(Game game) {
+        this.game = game;
+    }
+
     @Override
     public void show() {
         super.show();
@@ -55,6 +65,7 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         bg = new Texture("textures/bg.png");
         background = new Background(bg);
+        gameOver = new GameOver(atlas);
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
@@ -64,7 +75,7 @@ public class GameScreen extends BaseScreen {
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, bulletSound);
 
         mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
-
+        newGameButton = new NewGameButton(atlas, game);
         enemyEmitter = new EnemyEmitter(enemyPool, worldBounds, atlas);
     }
 
@@ -81,6 +92,8 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
+        gameOver.resize(worldBounds);
+        newGameButton.resize(worldBounds);
         for (Star star : stars) {
             star.resize(worldBounds);
         }
@@ -116,12 +129,14 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         mainShip.touchDown(touch, pointer, button);
+        newGameButton.touchDown(touch,pointer,button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         mainShip.touchUp(touch, pointer, button);
+        newGameButton.touchUp(touch, pointer,button);
         return false;
     }
 
@@ -189,8 +204,12 @@ public class GameScreen extends BaseScreen {
             bulletPool.drawActiveObjects(batch);
             enemyPool.drawActiveObjects(batch);
             mainShip.draw(batch);
+        }else {
+            gameOver.draw(batch);
+            newGameButton.draw(batch);
         }
         explosionPool.drawActiveObjects(batch);
         batch.end();
     }
+
 }
